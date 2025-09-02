@@ -1,0 +1,29 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test/coverage artifacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Build artifacts (if packaging is used)
+dist/
+build/
+*.egg-info/
+
+# Virtual environments (if using in-project venv)
+.venv/
+
+# macOS
+.DS_Store
+
+# Vim swap files (explicit list, no broad sw[a-z] range)
+.*.swp
+.*.swo
+.*.swn
+.*.swx
+.*.swm
+.*.swa
