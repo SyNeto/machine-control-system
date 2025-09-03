@@ -2,7 +2,7 @@
 
 import os
 from pathlib import Path
-from infrastructure.di.containers import DeviceContainer, ApplicationContainer
+from src.infrastructure.di.containers import DeviceContainer, ApplicationContainer
 
 
 def create_device_container(config_path: str = None) -> DeviceContainer:

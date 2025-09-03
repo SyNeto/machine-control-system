@@ -2,7 +2,7 @@ import asyncio
 import random
 from typing import Any, Dict
 
-from domain.ports.io_device import IODevice
+from src.domain.ports.io_device import IODevice
 
 
 class ValveAdapter(IODevice):

@@ -1,5 +1,5 @@
 from typing import List, Dict, Any, Optional
-from domain.ports.io_device import IODevice
+from src.domain.ports.io_device import IODevice
 
 
 class MachineControlService:

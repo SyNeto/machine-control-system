@@ -2,7 +2,7 @@ import asyncio
 import httpx
 from typing import Any, Dict, Optional
 
-from domain.ports.io_device import IODevice
+from src.domain.ports.io_device import IODevice
 
 
 class TemperatureAdapter(IODevice):
