@@ -23,6 +23,7 @@ build-backend = "poetry.core.masonry.api"
 pytest = "^8.4.1"
 pytest-asyncio = "^1.1.0"
 pytest-httpx = "^0.35.0"
+pytest-cov = "^6.2.1"
 
 [tool.pytest.ini_options]
 testpaths = [
@@ -33,4 +34,27 @@ python_files = [
     "*_test.py"
 ]
 addopts = "-q"
+
+[tool.coverage.run]
+source = ["src"]
+omit = [
+    "tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "src/infrastructure/di/*"
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+    "pass"
+]
+show_missing = true
+precision = 2
+
+[tool.coverage.html]
+directory = "htmlcov"
 

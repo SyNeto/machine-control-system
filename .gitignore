@@ -8,6 +8,7 @@ __pycache__/
 .coverage
 .coverage.*
 htmlcov/
+examples/
 
 # Build artifacts (if packaging is used)
 dist/
