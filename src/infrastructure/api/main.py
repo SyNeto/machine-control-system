@@ -1,13 +1,15 @@
 """FastAPI application setup and configuration.
 
 This module provides the main FastAPI application instance with basic
-configuration, health check endpoints, and dependency injection wiring.
+configuration, health check endpoints, dependency injection wiring,
+and device control routers.
 """
 
 from fastapi import FastAPI
 
 from src.application.machine_service import MachineControlService
 from src.infrastructure.api.dependencies import MachineServiceDep
+from src.infrastructure.api.routers import devices
 
 
 def create_app() -> FastAPI:
@@ -23,6 +25,17 @@ def create_app() -> FastAPI:
         docs_url="/docs",
         redoc_url="/redoc"
     )
+    
+    # Include API routers
+    app.include_router(devices.router, prefix="/api/v1")
+    
+    # Include WebSocket router
+    try:
+        from src.infrastructure.api.websockets import endpoints as ws_endpoints
+        app.include_router(ws_endpoints.router)
+    except ImportError:
+        # WebSockets not available, skip
+        pass
     
     @app.get("/")
     async def root(
@@ -41,8 +54,8 @@ def create_app() -> FastAPI:
         for device in machine_service.devices:
             try:
                 # Check if device is responsive
-                status = await device.get_status()
-                device_status[device.device_id] = "connected"
+                status_info = await device.get_status()
+                device_status[device.device_id] = "connected" if status_info["status"] == "online" else "disconnected"
             except Exception:
                 device_status[device.device_id] = "disconnected"
         
@@ -56,8 +69,12 @@ def create_app() -> FastAPI:
                 "health": "/health",
                 "docs": "/docs", 
                 "redoc": "/redoc",
-                "devices": "/devices (coming soon)",
-                "websocket": "/ws (coming soon)"
+                "devices": "/api/v1/devices",  # Add this back for compatibility
+                "devices_list": "/api/v1/devices",
+                "device_status": "/api/v1/devices/{device_id}",
+                "device_control": "/api/v1/devices/{device_id}",  # New generic endpoint
+                "websocket_devices": "/ws/devices",  # WebSocket endpoint
+                "websocket": "/ws/devices"  # Keep both for compatibility
             }
         }
     
