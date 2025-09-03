@@ -145,8 +145,9 @@ async def test_temperature_read_handles_http_error():
         mock_response = MagicMock()
         mock_response.status_code = 500
         mock_response.text = "Internal Server Error"
+        mock_request = httpx.Request("GET", "https://api.open-meteo.com/v1/forecast")
         mock_response.raise_for_status.side_effect = httpx.HTTPStatusError(
-            "500 Server Error", request=None, response=mock_response
+            "500 Server Error", request=mock_request, response=mock_response
         )
         
         # Configure the async client properly

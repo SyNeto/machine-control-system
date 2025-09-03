@@ -1,6 +1,3 @@
-"""Configuration loader and DI container factory."""
-
-import os
 from pathlib import Path
 from src.infrastructure.di.containers import DeviceContainer, ApplicationContainer
 

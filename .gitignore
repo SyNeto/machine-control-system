@@ -9,6 +9,7 @@ __pycache__/
 .coverage.*
 htmlcov/
 examples/
+.vscode/
 
 # Build artifacts (if packaging is used)
 dist/
