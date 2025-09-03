@@ -1,15 +1,8 @@
-"""Port interface for unified I/O devices (sensors, actuators, hybrid).
-
-This module defines the domain port for I/O devices following Hexagonal
-Architecture (Ports & Adapters). Documentation follows ADR-002 using
-Google-style docstrings combined with type hints.
-"""
-
 from abc import ABC, abstractmethod
 from typing import Any, Dict
 
 class IODevice(ABC):
-    """Abstract base class for I/O devices in industrial automation.
+    """Abstract base class for I/O devices.
 
     Purpose:
             Provide a single, consistent contract for sensors, actuators, and
