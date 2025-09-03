@@ -1,7 +1,7 @@
 # ADR-001: Machine Control Panel Architecture
 
-## Status
-**ACCEPTED** - 2025-09-02
+**Date:** 2025-09-03  
+**Author:** Ernesto Jiménez Villaseñor
 
 ## Context
 Building a Machine Control Panel application for a technical assessment with the following requirements:

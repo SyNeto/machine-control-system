@@ -1,7 +1,7 @@
 # ADR-004: Web API Layer with FastAPI
 
-## Status
-Accepted
+**Date:** 2025-09-03  
+**Author:** Ernesto Jiménez Villaseñor
 
 ## Context
 

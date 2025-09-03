@@ -1,8 +1,7 @@
 # ADR-003: Adoption of Dependency Injection for Hexagonal Architecture Assembly
 
-## Status
-
-Accepted
+**Date:** 2025-09-03  
+**Author:** Ernesto Jiménez Villaseñor
 
 ## Context
 

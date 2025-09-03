@@ -1,7 +1,7 @@
 # ADR-002: Documentation Standards
 
-## Status
-**ACCEPTED** - 2025-09-02
+**Date:** 2025-09-03  
+**Author:** Ernesto Jiménez Villaseñor
 
 ## Context
 The Machine Control Panel application requires comprehensive documentation to:
