@@ -9,33 +9,46 @@ Building a Machine Control Panel application for a technical assessment with the
 - **Frontend**: React application for machine control and monitoring
 - **Architecture**: Need maintainable, testable, and extensible design
 
-The application must simulate industrial machine behavior while being flexible enough to add new sensors/actuators in the future.
+The application must simulate industrial machine behavior while being flexible enough to add new sensors/actuators in the future. However, the **business logic is intentionally simple**: primarily reading sensor data and controlling actuators without complex domain rules.
 
 ## Decision
-We will implement a **Hexagonal Architecture** (Ports and Adapters) with the following structure:
+We will implement a **Simplified Hexagonal Architecture** (Ports and Adapters) optimized for straightforward I/O coordination rather than complex domain modeling.
+
+### Architectural Rationale
+
+#### Why Simplified Approach
+- **Minimal Business Complexity**: Core operations are simple read/write device coordination
+- **Declarative Focus**: Application services orchestrate devices in a clear, readable manner
+- **Pragmatic over Purist**: Maintains clean architecture benefits without over-engineering
+- **Integration-Centric**: Architecture optimized for device coordination rather than complex business rules
 
 ### Core Architecture Layers
 
-#### 1. **Domain Layer** (Business Logic)
-- `Machine` entity as aggregate root
+#### 1. **Domain Layer** (Interfaces & Contracts)
 - `IODevice` port interface for unified I/O device abstraction
-- Value objects for machine state representation
-- **Location**: `src/domain/`
+- Domain interfaces without complex entities (business logic is simple)
+- **Location**: `src/domain/ports/`
 
-#### 2. **Application Layer** (Use Cases) 
-- `MachineControlService` orchestrating domain operations
-- Use case implementations (read sensors, control actuators, get status)
-- **Location**: `src/application/services/`
+#### 2. **Application Layer** (Service Coordination) 
+- `MachineControlService` coordinating device operations
+- Simple orchestration of read/write operations across devices
+- **Location**: `src/application/`
 
-#### 3. **Infrastructure Layer** (Adapters)
-- **Input Adapters**: REST API controllers
-- **Output Adapters**: Weather API client, device simulators
-- **Location**: `src/infrastructure/adapters/`
+#### 3. **Infrastructure Layer** (Concrete Implementations)
+- **Device Adapters**: Motor, Valve, Temperature, Servo implementations
+- **Dependency Injection**: Container-based assembly with YAML configuration
+- **Location**: `src/infrastructure/`
 
 ### Key Design Decisions
 
+#### Service-Oriented Coordination
+Instead of complex domain entities, we use a **service-based approach**:
+- `MachineControlService` receives a list of `IODevice` implementations
+- Provides both generic methods (`read_device`, `write_device`) and convenience methods (`set_motor_speed`, `get_temperature`)
+- Business logic remains declarative and straightforward
+
 #### Unified I/O Device Port
-Instead of separating sensors and actuators, we chose a **single `IODevice` interface**:
+All devices implement a **single `IODevice` interface**:
 
 ```python
 class IODevice(ABC):
@@ -115,21 +128,36 @@ class IODevice(ABC):
 ```
 src/
 ├── domain/
-│   ├── ports/
-│   │   └── io_device.py
-│   ├── entities/
-│   │   └── machine.py
-│   └── value_objects/
-│       └── machine_state.py
+│   └── ports/
+│       └── io_device.py              # Abstract IODevice interface
 ├── application/
-│   └── services/
-│       └── machine_control_service.py  
+│   └── machine_service.py            # Service-based coordination
 └── infrastructure/
-    └── adapters/
-        ├── weather_api_adapter.py
-        ├── motor_adapter.py
-        └── valve_adapter.py
+    ├── adapters/
+    │   ├── temperature_adapter.py    # OpenMeteo API integration
+    │   ├── motor_adapter.py          # Motor simulation
+    │   ├── valve_adapter.py          # Valve simulation
+    │   └── servo_adapter.py          # Servo simulation
+    └── di/
+        ├── containers.py             # DI containers
+        ├── factory.py                # Container factory
+        └── config/
+            └── devices.yaml          # Device configuration
 ```
+
+## Benefits of Simplified Approach
+
+### Maintained Clean Architecture Principles
+- ✅ **Dependency Inversion**: Application depends on abstractions (`IODevice`)
+- ✅ **Testability**: Easy mocking through dependency injection
+- ✅ **Separation of Concerns**: Infrastructure isolated from application logic
+- ✅ **Extensibility**: New device types integrate seamlessly
+
+### Optimized for Simplicity
+- ✅ **Declarative Code**: Service methods are clear and readable
+- ✅ **Minimal Overhead**: No unnecessary abstraction layers
+- ✅ **Configuration-Driven**: Device assembly through YAML and DI
+- ✅ **Appropriate Complexity**: Architecture matches business requirements
 
 ## References
 - [Hexagonal Architecture (Ports and Adapters) by Alistair Cockburn](https://alistair.cockburn.us/hexagonal-architecture/)
