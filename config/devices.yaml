@@ -1,0 +1,30 @@
+# IoT Device Configuration - Minimal Setup
+# Simple configuration with one device of each type for testing
+
+devices:
+  temperature_sensor:
+    id: "temp_01"
+    latitude: 19.4326   # Mexico City coordinates
+    longitude: -99.1332
+    timeout: 10.0
+    description: "Main temperature sensor"
+
+  valve:
+    id: "valve_01"
+    initial_state: false
+    description: "Main control valve"
+
+  motor:
+    id: "motor_01"
+    initial_speed: 0
+    description: "Main motor"
+
+  servo:
+    id: "servo_01"
+    initial_angle: 90
+    description: "Main servo"
+
+# System settings
+system:
+  default_timeout: 10.0
+  max_retries: 3
