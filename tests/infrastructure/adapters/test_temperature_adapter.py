@@ -9,7 +9,7 @@ from infrastructure.adapters.temperature_adapter import TemperatureAdapter
 def temp_sensor():
     """Create a TemperatureAdapter instance for testing (Mexico City coordinates)."""
     return TemperatureAdapter(
-        sensor_id="temp_01",
+        device_id="temp_01",
         latitude=19.4326,  # Mexico City
         longitude=-99.1332,
         timeout=5.0

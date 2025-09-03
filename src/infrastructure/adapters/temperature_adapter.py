@@ -14,7 +14,7 @@ class TemperatureAdapter(IODevice):
     
     def __init__(
         self, 
-        sensor_id: str, 
+        device_id: str,
         latitude: float, 
         longitude: float,
         timeout: float = 10.0
@@ -22,12 +22,12 @@ class TemperatureAdapter(IODevice):
         """Initialize temperature sensor adapter.
         
         Args:
-            sensor_id: Unique identifier for this temperature sensor
+            device_id: Unique identifier for this temperature sensor
             latitude: Geographic latitude for temperature reading
             longitude: Geographic longitude for temperature reading  
             timeout: HTTP request timeout in seconds (default: 10.0)
         """
-        self._sensor_id = sensor_id
+        self._device_id = device_id
         self._latitude = latitude
         self._longitude = longitude
         self._timeout = timeout
@@ -42,8 +42,8 @@ class TemperatureAdapter(IODevice):
     @property
     def device_id(self) -> str:
         """Return the temperature sensor identifier."""
-        return self._sensor_id
-    
+        return self._device_id
+
     @property
     def device_type(self) -> str:
         """Return the device type."""

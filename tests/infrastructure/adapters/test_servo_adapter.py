@@ -8,19 +8,19 @@ from infrastructure.adapters.servo_adapter import ServoAdapter
 @pytest.fixture
 def servo_adapter():
     """Create a ServoAdapter instance for testing (starts at center position)."""
-    return ServoAdapter(servo_id="servo_01", initial_angle=90)
+    return ServoAdapter(device_id="servo_01", initial_angle=90)
 
 
 @pytest.fixture
 def servo_at_zero():
     """Create a ServoAdapter instance that starts at 0 degrees."""
-    return ServoAdapter(servo_id="servo_02", initial_angle=0)
+    return ServoAdapter(device_id="servo_02", initial_angle=0)
 
 
 @pytest.fixture
 def servo_at_max():
     """Create a ServoAdapter instance that starts at 180 degrees."""
-    return ServoAdapter(servo_id="servo_03", initial_angle=180)
+    return ServoAdapter(device_id="servo_03", initial_angle=180)
 
 
 @pytest.mark.asyncio

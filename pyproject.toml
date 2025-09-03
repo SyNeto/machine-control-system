@@ -9,6 +9,9 @@ license = {text = "MIT"}
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "httpx (>=0.28.1,<0.29.0)",
+    "dependency-injector[yaml] (>=4.48.1,<5.0.0)",
+    "pyyaml (>=6.0.2,<7.0.0)"
 ]
 
 
@@ -19,6 +22,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.4.1"
 pytest-asyncio = "^1.1.0"
+pytest-httpx = "^0.35.0"
 
 [tool.pytest.ini_options]
 testpaths = [

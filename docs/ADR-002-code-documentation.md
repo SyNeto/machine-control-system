@@ -254,6 +254,3 @@ class WeatherApiAdapter(IODevice):
 - [PEP 257 - Docstring Conventions](https://peps.python.org/pep-0257/)
 - [PEP 484 - Type Hints](https://peps.python.org/pep-0484/)
 - [Sphinx Documentation](https://www.sphinx-doc.org/)
-
----
-**Next ADR**: ADR-003 will cover testing strategies and framework choices

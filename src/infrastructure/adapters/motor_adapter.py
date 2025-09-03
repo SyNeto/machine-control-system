@@ -13,14 +13,14 @@ class MotorAdapter(IODevice):
     Speed range: 0-255 (8-bit PWM resolution).
     """
     
-    def __init__(self, motor_id: str, initial_speed: int = 0):
+    def __init__(self, device_id: str, initial_speed: int = 0):
         """Initialize motor adapter.
         
         Args:
-            motor_id: Unique identifier for this motor
+            device_id: Unique identifier for this motor
             initial_speed: Initial motor speed (0-255, default 0=stopped)
         """
-        self._motor_id = motor_id
+        self._device_id = device_id
         if not (0 <= initial_speed <= 255):
             raise ValueError("Initial speed must be in range 0-255")
         self._current_speed = initial_speed
@@ -29,8 +29,8 @@ class MotorAdapter(IODevice):
     @property
     def device_id(self) -> str:
         """Return the motor identifier."""
-        return self._motor_id
-    
+        return self._device_id
+
     @property
     def device_type(self) -> str:
         """Return the device type."""

@@ -12,22 +12,22 @@ class ValveAdapter(IODevice):
     Acts as both sensor (read current state) and actuator (control open/closed).
     """
     
-    def __init__(self, valve_id: str, initial_state: bool = False):
+    def __init__(self, device_id: str, initial_state: bool = False):
         """Initialize valve adapter.
         
         Args:
             valve_id: Unique identifier for this valve
             initial_state: Initial valve state (False=closed, True=open)
         """
-        self._valve_id = valve_id
+        self._device_id = device_id
         self._is_open = initial_state
         self._lock = asyncio.Lock()
     
     @property
     def device_id(self) -> str:
         """Return the valve identifier."""
-        return self._valve_id
-    
+        return self._device_id
+
     @property
     def device_type(self) -> str:
         """Return the device type."""

@@ -8,13 +8,13 @@ from infrastructure.adapters.motor_adapter import MotorAdapter
 @pytest.fixture
 def motor_adapter():
     """Create a MotorAdapter instance for testing (starts stopped)."""
-    return MotorAdapter(motor_id="motor_01", initial_speed=0)
+    return MotorAdapter(device_id="motor_01", initial_speed=0)
 
 
 @pytest.fixture
 def running_motor_adapter():
     """Create a MotorAdapter instance that starts running at mid speed."""
-    return MotorAdapter(motor_id="motor_02", initial_speed=128)
+    return MotorAdapter(device_id="motor_02", initial_speed=128)
 
 
 @pytest.mark.asyncio

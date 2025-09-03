@@ -12,15 +12,15 @@ class ServoAdapter(IODevice):
     Acts as both sensor (read current angle) and actuator (control position).
     Angle range: 0-180 degrees (standard servo range).
     """
-    
-    def __init__(self, servo_id: str, initial_angle: int = 90):
+
+    def __init__(self, device_id: str, initial_angle: int = 90):
         """Initialize servo adapter.
         
         Args:
-            servo_id: Unique identifier for this servo
+            device_id: Unique identifier for this servo
             initial_angle: Initial servo angle (0-180 degrees, default 90=center)
         """
-        self._servo_id = servo_id
+        self._device_id = device_id
         if not (0 <= initial_angle <= 180):
             raise ValueError("Initial angle must be in range 0-180 degrees")
         self._current_angle = initial_angle
@@ -29,7 +29,7 @@ class ServoAdapter(IODevice):
     @property
     def device_id(self) -> str:
         """Return the servo identifier."""
-        return self._servo_id
+        return self._device_id
     
     @property
     def device_type(self) -> str:
