@@ -1,39 +1,48 @@
 # Machine Control Panel
 
 [![Python](https://img.shields.io/badge/Python-3.13+-blue.svg)](https://python.org)
-[![Poetry](https://img.shields.io/badge/Poetry-Dependency%20Management-blue.svg)](https://python-poetry.org/)
 [![React](https://img.shields.io/badge/React-18+-61DAFB.svg)](https://reactjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-green.svg)](https://fastapi.tiangolo.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5+-3178C6.svg)](https://www.typescriptlang.org/)
-[![Architecture](https://img.shields.io/badge/Architecture-Hexagonal-green.svg)](https://alistair.cockburn.us/hexagonal-architecture/)
 
-A modern full-stack device control system with real-time monitoring and control of industrial devices. Built with Python FastAPI backend and React TypeScript frontend, featuring WebSocket communication and responsive design.
+Full-stack industrial IoT control system with real-time device monitoring via WebSocket. **Monorepo** containing Python FastAPI backend (`apps/backend`) and React TypeScript frontend (`apps/webapp`) with hexagonal architecture, real-time temperature from OpenMeteo API, and responsive controls.
 
-## 🚀 Project Overview
+## 🚀 Quick Start
 
-The Machine Control Panel is a full-stack industrial IoT system with real-time device monitoring and control capabilities. It features a Python FastAPI backend with hexagonal architecture and a modern React TypeScript frontend.
+### Prerequisites
+- **Python 3.13+** with Poetry
+- **Node.js 18+** with npm
 
-**Backend Features:**
-- **Real-time monitoring** of temperature, motor speed, valve states, and servo positions
-- **Device control** through standardized REST API interfaces  
-- **WebSocket streaming** for real-time data updates
-- **External API integration** with OpenMeteo for environmental data
-- **Scalable architecture** using dependency injection and hexagonal design
+### Run the Complete System
 
-**Frontend Features:**
-- **Responsive dashboard** built with React 18 and TypeScript 5
-- **Real-time UI updates** via WebSocket connections
-- **Device-specific controls** with validation and error handling
-- **Modern design system** using Tailwind CSS
-- **State management** with Zustand for predictable updates
+1. **Clone and navigate**
+   ```bash
+   git clone <repository-url>
+   cd machine-control-system
+   ```
 
-### Key Features
+2. **Start Backend** (Terminal 1)
+   ```bash
+   cd apps/backend
+   poetry install
+   poetry run uvicorn src.infrastructure.api.main:app --reload
+   ```
+   Backend API: http://localhost:8000/docs
 
-- 🌡️ **Temperature Monitoring**: Real-time environmental data via OpenMeteo API
-- ⚙️ **Motor Control**: Speed management with realistic simulation
-- 🔧 **Valve Management**: Binary state control (open/closed)
-- 🎛️ **Servo Control**: Precise position control (0-180°)
-- 📡 **WebSocket Streaming**: Real-time data updates with configurable intervals
-- 🔌 **REST API**: Device configuration and control endpoints
+3. **Start Frontend** (Terminal 2)
+   ```bash
+   cd apps/webapp
+   npm install
+   npm run dev
+   ```
+   Dashboard: http://localhost:5173
+
+### Core Features
+- 🌡️ **Real-time Temperature**: OpenMeteo API integration (not simulated)
+- ⚙️ **Motor Control**: 0-255 PWM with RPM conversion (0-40000)
+- 🔧 **Valve Control**: Binary open/closed with animations
+- 🎛️ **Servo Control**: 0-180° positioning with integer validation
+- 📡 **WebSocket Real-time**: Bi-directional updates with auto-reconnect
 
 ## 🏗️ Architecture
 
@@ -79,100 +88,20 @@ graph TB
     DIContainer --> ServoAdapter
 ```
 
-### Layer Responsibilities
+**Architecture Layers:**
+- **Domain**: Device abstractions (IODevice interface)
+- **Application**: Business workflows (MachineControlService)  
+- **Infrastructure**: External integrations (FastAPI, OpenMeteo, WebSockets)
 
-- **Domain**: Core business rules and device abstractions
-- **Application**: Service coordination and business workflows  
-- **Infrastructure**: External integrations, web APIs, and device adapters
-
-## 🛠️ Getting Started
-
-### Prerequisites
-
-- **Python 3.13+** with Poetry for dependency management
-- **Node.js 18+** with npm for frontend dependencies
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd machine-control-system
-   ```
-
-### Running the Backend
-
-1. **Navigate to backend directory**
-   ```bash
-   cd apps/backend
-   ```
-
-2. **Install dependencies**
-   ```bash
-   poetry install
-   ```
-
-3. **Activate virtual environment**
-   ```bash
-   poetry shell
-   ```
-
-4. **Start the backend server**
-   ```bash
-   uvicorn src.infrastructure.api.main:app --host 0.0.0.0 --port 8000 --reload
-   ```
-
-   The backend API will be available at:
-   - **API Documentation**: http://localhost:8000/docs
-   - **REST Endpoints**: http://localhost:8000/api/v1/
-   - **WebSocket**: ws://localhost:8000/ws/devices
-
-### Running the Frontend
-
-1. **Navigate to frontend directory**
-   ```bash
-   cd apps/webapp
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Start the development server**
-   ```bash
-   npm run dev
-   ```
-
-   The frontend will be available at:
-   - **Dashboard**: http://localhost:5173
-
-### Full Stack Development
-
-For full development, run both applications simultaneously:
-
-```bash
-# Terminal 1 - Backend
-cd apps/backend && poetry run uvicorn src.infrastructure.api.main:app --reload
-
-# Terminal 2 - Frontend  
-cd apps/webapp && npm run dev
-```
+## 🛠️ Development
 
 ### Testing
-
-**Backend Tests:**
 ```bash
-cd apps/backend
-poetry run pytest                                    # Run all tests
-poetry run pytest --cov=src --cov-report=html      # With coverage
-```
+# Backend tests
+cd apps/backend && poetry run pytest --cov=src
 
-**Frontend Tests:**
-```bash
-cd apps/webapp
-npm run test                                        # Run tests
-npm run build                                       # Build for production
+# Frontend build 
+cd apps/webapp && npm run build
 ```
 
 ## 📁 Project Structure
@@ -224,101 +153,39 @@ machine-control-system/
             └── utils/            # Utility functions
 ```
 
-## 🔧 Supported Devices
+## 🎯 Device Details
 
-### Temperature Sensor
-- **Integration**: OpenMeteo API for real environmental data
-- **Coordinates**: Currently configured for specific geographic location
-- **Polling**: Optimized 2-minute intervals to respect free API limits
-- **Error Handling**: Robust HTTP error mapping and fallback strategies
+| Device | Type | Range | API Endpoint | Features |
+|--------|------|-------|--------------|----------|
+| 🌡️ **Temperature** | Read-only | Real-time | `GET /devices/temp_sensor_01` | OpenMeteo API, 2min polling |
+| ⚙️ **Motor** | Control | 0-255 PWM | `POST /devices/motor_01` | Speed simulation, RPM display |
+| 🔧 **Valve** | Control | Open/Closed | `POST /devices/valve_01` | Binary state, visual feedback |
+| 🎛️ **Servo** | Control | 0-180° | `POST /devices/servo_01` | Integer angles, precise positioning |
 
-### Motor Control
-- **Simulation**: Realistic speed control with acceleration curves
-- **Range**: 0-100% speed control
-- **Status**: Current speed, acceleration state, operational status
-- **Safety**: Built-in limits and error conditions
+## 💻 Tech Stack
 
-### Valve Management  
-- **States**: Binary open/closed control
-- **Feedback**: Position confirmation and transition status
-- **Safety**: Fail-safe modes and timeout protection
-- **Simulation**: Realistic operation timing
+**Backend:** Python 3.13 + FastAPI + WebSockets + Poetry + Pytest  
+**Frontend:** React 18 + TypeScript 5 + Tailwind CSS + Zustand + Vite  
+**Architecture:** Hexagonal (Ports & Adapters) + Dependency Injection  
+**Real-time:** WebSocket bi-directional communication with auto-reconnect  
+**External API:** OpenMeteo for real temperature data (not simulated)
 
-### Servo Control
-- **Range**: 0-180° position control
-- **Precision**: High-accuracy positioning simulation
-- **Feedback**: Current position and movement status
-- **Calibration**: Self-calibration and limit detection
+## ✅ Implementation Highlights
 
-## 🛠️ Technology Stack
+**Core Requirements Met:**
+- ✅ **Python Backend** with FastAPI + hexagonal architecture
+- ✅ **React Frontend** with TypeScript + responsive design  
+- ✅ **Real Temperature API** - OpenMeteo integration (not simulated)
+- ✅ **Motor Control** - PWM speed with RPM display (0-255 → 0-40000)
+- ✅ **Valve Control** - Binary open/closed with visual feedback
 
-### Backend Stack
-- **🐍 Python 3.13+** - Core runtime and language
-- **⚡ FastAPI** - Modern web framework with automatic API documentation
-- **🔌 WebSockets** - Real-time bidirectional communication  
-- **📦 Poetry** - Dependency management and packaging
-- **🧪 Pytest** - Testing framework with async support
-- **🎯 Dependency Injection** - Clean architecture with container pattern
-- **📊 OpenMeteo API** - Real environmental temperature data
-
-### Frontend Stack
-- **⚛️ React 18** - Modern component-based UI framework
-- **📘 TypeScript 5** - Type-safe JavaScript development
-- **🎨 Tailwind CSS** - Utility-first CSS framework
-- **🏪 Zustand** - Lightweight state management
-- **⚡ Vite** - Fast build tool and development server
-- **🔗 WebSocket Client** - Real-time data streaming
-- **📱 Responsive Design** - Mobile-first responsive layouts
-
-### Architecture Patterns
-- **🏗️ Hexagonal Architecture** - Clean separation of concerns
-- **🔌 Ports & Adapters** - Technology-agnostic business logic
-- **🚀 Service Layer** - Business workflow coordination
-- **📡 WebSocket Integration** - Real-time UI updates
-- **🎯 Component Composition** - Reusable UI building blocks
-
-## 📋 Key Features
-
-### ✅ Implemented Features
-
-**Backend Capabilities:**
-- ✅ **Device Abstraction** - Generic IoDevice interface for all device types
-- ✅ **REST API** - FastAPI endpoints for device control and monitoring
-- ✅ **WebSocket Streaming** - Real-time device state updates
-- ✅ **CORS Support** - Frontend integration with proper cross-origin handling
-- ✅ **Device Types** - Motor (0-255 PWM), Servo (0-180°), Valve (open/closed), Temperature sensor
-- ✅ **External APIs** - OpenMeteo integration for real environmental data
-- ✅ **Error Handling** - Comprehensive validation and error responses
-
-**Frontend Capabilities:**
-- ✅ **Responsive Dashboard** - Mobile-first design with device status overview
-- ✅ **Real-time Controls** - Sliders, toggles, and displays with live updates
-- ✅ **WebSocket Integration** - Auto-reconnecting real-time data streaming
-- ✅ **Device-Specific UI** - Tailored controls for each device type
-- ✅ **State Management** - Zustand store with optimistic updates
-- ✅ **Type Safety** - Full TypeScript coverage for API and UI
-- ✅ **PWM-RPM Mapping** - Motor speed display conversion (0-255 → 0-40000 RPM)
-
-### 🚀 Future Enhancements
-- **Authentication & Authorization** - User management and access control
-- **Data Persistence** - Historical data logging and analytics
-- **Alert System** - Configurable thresholds and notifications
-- **Device Discovery** - Auto-detection of new devices
-- **Multi-tenant Support** - Organization and user isolation
-
-## 🤝 Contributing
-
-1. Follow the established hexagonal architecture patterns
-2. Maintain comprehensive test coverage for both backend and frontend
-3. Document architectural decisions in ADRs
-4. Use Google-style docstrings for Python and TSDoc for TypeScript
-5. Ensure async/await compatibility and proper error handling
-6. Follow Conventional Commits 1.0 for commit messages
-
-## 📄 License
-
-MIT License - see LICENSE file for details.
+**Extra Features Added:**
+- ✅ **Servo Motor** - 0-180° positioning with integer validation
+- ✅ **WebSocket Real-time** - Bi-directional updates with auto-reconnect
+- ✅ **Optimistic UI** - Immediate feedback with rollback on errors
+- ✅ **Mobile Responsive** - Touch-friendly controls for all devices
+- ✅ **Professional Documentation** - ADRs + Mermaid diagrams
 
 ---
 
-**Built with ❤️ using Python FastAPI, React TypeScript, and modern full-stack architecture.**
+**Built with Python FastAPI + React TypeScript using hexagonal architecture principles.**
