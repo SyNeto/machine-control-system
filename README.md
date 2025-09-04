@@ -39,46 +39,44 @@ The Machine Control Panel is a full-stack industrial IoT system with real-time d
 
 This project implements a **Simplified Hexagonal Architecture** with clear separation of concerns:
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    Infrastructure Layer                     │
-├─────────────────────┬─────────────────────┬─────────────────┤
-│   Input Adapters    │   Output Adapters   │  Configuration  │
-│  ┌─────────────┐    │  ┌─────────────┐    │  ┌─────────────┐ │
-│  │ FastAPI     │    │  │ Temperature │    │  │ Dependency  │ │
-│  │ (Web API)   │    │  │ Adapter     │    │  │ Injection   │ │
-│  │             │    │  │             │    │  │ Container   │ │
-│  └─────────────┘    │  ├─────────────┤    │  └─────────────┘ │
-│                     │  │ Motor       │    │                 │
-│                     │  │ Adapter     │    │                 │
-│                     │  │             │    │                 │
-│                     │  ├─────────────┤    │                 │
-│                     │  │ Valve       │    │                 │
-│                     │  │ Adapter     │    │                 │
-│                     │  │             │    │                 │
-│                     │  ├─────────────┤    │                 │
-│                     │  │ Servo       │    │                 │
-│                     │  │ Adapter     │    │                 │
-│                     │  └─────────────┘    │                 │
-└─────────────────────┴─────────────────────┴─────────────────┘
-┌─────────────────────────────────────────────────────────────┐
-│                    Application Layer                        │
-│  ┌─────────────────────────────────────────────────────┐    │
-│  │            MachineControlService                    │    │
-│  │  - **Device coordination and orchestration**: Service-oriented device coordination           │    │
-│  │  • Business logic for device interactions          │    │
-│  │  • Service-oriented architecture approach          │    │
-│  └─────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────────┐
-│                      Domain Layer                           │
-│  ┌─────────────────────────────────────────────────────┐    │
-│  │                  IODevice Port                      │    │
-│  │  • Abstract interface for all devices              │    │
-│  │  • Defines read(), write(), get_status() contracts │    │
-│  │  • Technology-agnostic device operations           │    │
-│  └─────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph "Infrastructure Layer"
+        subgraph "Input Adapters"
+            FastAPI["🌐 FastAPI<br/>Web API<br/>WebSockets"]
+        end
+        
+        subgraph "Output Adapters"
+            TempAdapter["🌡️ Temperature<br/>Adapter<br/>(OpenMeteo)"]
+            MotorAdapter["⚙️ Motor<br/>Adapter"]
+            ValveAdapter["🔧 Valve<br/>Adapter"]
+            ServoAdapter["🎛️ Servo<br/>Adapter"]
+        end
+        
+        subgraph "Configuration"
+            DIContainer["💉 Dependency<br/>Injection<br/>Container"]
+        end
+    end
+    
+    subgraph "Application Layer"
+        MachineService["🚀 MachineControlService<br/>• Device coordination<br/>• Business workflows<br/>• Service orchestration"]
+    end
+    
+    subgraph "Domain Layer"
+        IODevice["🎯 IODevice Port<br/>• Abstract device interface<br/>• read(), write(), get_status()<br/>• Technology-agnostic"]
+    end
+    
+    FastAPI --> MachineService
+    MachineService --> IODevice
+    IODevice --> TempAdapter
+    IODevice --> MotorAdapter
+    IODevice --> ValveAdapter
+    IODevice --> ServoAdapter
+    DIContainer --> MachineService
+    DIContainer --> TempAdapter
+    DIContainer --> MotorAdapter
+    DIContainer --> ValveAdapter
+    DIContainer --> ServoAdapter
 ```
 
 ### Layer Responsibilities

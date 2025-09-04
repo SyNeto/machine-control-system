@@ -21,44 +21,44 @@ This backend implements a **Simplified Hexagonal Architecture** (Ports & Adapter
 
 ### Architecture Layers
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                 Infrastructure Layer                       │
-├─────────────────────┬─────────────────────┬─────────────────┤
-│   Input Adapters    │   Output Adapters   │  Configuration  │
-│  ┌─────────────┐    │  ┌─────────────┐    │  ┌─────────────┐ │
-│  │ FastAPI     │    │  │ Temperature │    │  │ Dependency  │ │
-│  │ REST API    │    │  │ Adapter     │    │  │ Injection   │ │
-│  │ WebSockets  │    │  │ (OpenMeteo) │    │  │ Container   │ │
-│  └─────────────┘    │  ├─────────────┤    │  └─────────────┘ │
-│                     │  │ Motor       │    │                 │
-│                     │  │ Adapter     │    │                 │
-│                     │  ├─────────────┤    │                 │
-│                     │  │ Valve       │    │                 │
-│                     │  │ Adapter     │    │                 │
-│                     │  ├─────────────┤    │                 │
-│                     │  │ Servo       │    │                 │
-│                     │  │ Adapter     │    │                 │
-│                     │  └─────────────┘    │                 │
-└─────────────────────┴─────────────────────┴─────────────────┘
-┌─────────────────────────────────────────────────────────────┐
-│                 Application Layer                          │
-│  ┌─────────────────────────────────────────────────────┐    │
-│  │          MachineControlService                      │    │
-│  │  • Device coordination and orchestration            │    │
-│  │  • Business logic for device interactions          │    │
-│  │  • Service-oriented architecture approach          │    │
-│  └─────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────────┐
-│                    Domain Layer                            │
-│  ┌─────────────────────────────────────────────────────┐    │
-│  │                IODevice Port                        │    │
-│  │  • Abstract interface for all devices              │    │
-│  │  • Defines read(), write(), get_status() contracts │    │
-│  │  • Technology-agnostic device operations           │    │
-│  └─────────────────────────────────────────────────────┘    │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph "🔌 Infrastructure Layer"
+        subgraph "Input Adapters"
+            FastAPI["🌐 FastAPI<br/>REST API<br/>WebSockets"]
+        end
+        
+        subgraph "Output Adapters"
+            TempAdapter["🌡️ Temperature Adapter<br/>(OpenMeteo API)"]
+            MotorAdapter["⚙️ Motor Adapter<br/>(Simulation)"]
+            ValveAdapter["🔧 Valve Adapter<br/>(Binary Control)"]
+            ServoAdapter["🎛️ Servo Adapter<br/>(Position Control)"]
+        end
+        
+        subgraph "Configuration"
+            DIContainer["💉 Dependency<br/>Injection Container"]
+        end
+    end
+    
+    subgraph "🚀 Application Layer"
+        MachineService["MachineControlService<br/>• Device coordination<br/>• Business workflows<br/>• Service orchestration"]
+    end
+    
+    subgraph "🎯 Domain Layer"
+        IODevice["IODevice Port<br/>• Abstract device interface<br/>• read(), write(), get_status()<br/>• Technology-agnostic operations"]
+    end
+    
+    FastAPI --> MachineService
+    MachineService --> IODevice
+    IODevice -.-> TempAdapter
+    IODevice -.-> MotorAdapter
+    IODevice -.-> ValveAdapter
+    IODevice -.-> ServoAdapter
+    DIContainer --> MachineService
+    DIContainer --> TempAdapter
+    DIContainer --> MotorAdapter
+    DIContainer --> ValveAdapter
+    DIContainer --> ServoAdapter
 ```
 
 ## 🚀 Quick Start

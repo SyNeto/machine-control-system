@@ -23,38 +23,79 @@ This frontend implements **Component-Driven Architecture** with modern React pat
 
 ### Architecture Layers
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                  Presentation Layer                        │
-├─────────────────────┬─────────────────────┬─────────────────┤
-│   UI Components     │   Layout Components │   Device Cards  │
-│  ┌─────────────┐    │  ┌─────────────┐    │  ┌─────────────┐ │
-│  │ToggleButton │    │  │ Header      │    │  │ MotorCard   │ │
-│  │SliderControl│    │  │ Dashboard   │    │  │ ValveCard   │ │
-│  │DisplayValue │    │  │ Sidebar     │    │  │ ServoCard   │ │
-│  │HealthInd... │    │  └─────────────┘    │  │ TempCard    │ │
-│  └─────────────┘    │                     │  └─────────────┘ │
-└─────────────────────┴─────────────────────┴─────────────────┘
-┌─────────────────────────────────────────────────────────────┐
-│                   Logic Layer                              │
-├─────────────────────┬─────────────────────┬─────────────────┤
-│   Custom Hooks      │   State Management  │  Event Handlers │
-│  ┌─────────────┐    │  ┌─────────────┐    │  ┌─────────────┐ │
-│  │ useDevice   │    │  │ DeviceStore │    │  │ Control     │ │
-│  │ useDevices  │    │  │ (Zustand)   │    │  │ Handlers    │ │
-│  │ useWebSocket│    │  │             │    │  │             │ │
-│  └─────────────┘    │  └─────────────┘    │  └─────────────┘ │
-└─────────────────────┴─────────────────────┴─────────────────┘
-┌─────────────────────────────────────────────────────────────┐
-│                   Service Layer                            │
-├─────────────────────┬─────────────────────┬─────────────────┤
-│   API Services      │   WebSocket Client  │   Type Defs     │
-│  ┌─────────────┐    │  ┌─────────────┐    │  ┌─────────────┐ │
-│  │ Device API  │    │  │ WS Manager  │    │  │ Device      │ │
-│  │ Health API  │    │  │ Auto-       │    │  │ Types       │ │
-│  │ HTTP Client │    │  │ Reconnect   │    │  │ API Types   │ │
-│  └─────────────┘    │  └─────────────┘    │  └─────────────┘ │
-└─────────────────────┴─────────────────────┴─────────────────┘
+```mermaid
+graph TB
+    subgraph "🎨 Presentation Layer"
+        subgraph "UI Components"
+            Toggle["🔘 Toggle<br/>Button"]
+            Slider["🎚️ Slider<br/>Control"] 
+            Display["📊 Display<br/>Value"]
+            Health["💓 Health<br/>Indicator"]
+        end
+        
+        subgraph "Layout Components"
+            Header["🏠 Header"]
+            Dashboard["📋 Dashboard"]
+            Sidebar["📂 Sidebar"]
+        end
+        
+        subgraph "Device Cards"
+            MotorCard["⚙️ Motor<br/>Card"]
+            ValveCard["🔧 Valve<br/>Card"]
+            ServoCard["🎛️ Servo<br/>Card"]
+            TempCard["🌡️ Temp<br/>Card"]
+        end
+    end
+    
+    subgraph "🧠 Logic Layer"
+        subgraph "Custom Hooks"
+            useDevice["🪝 useDevice"]
+            useDevices["🪝 useDevices"]
+            useWebSocket["🪝 useWebSocket"]
+        end
+        
+        subgraph "State Management"
+            DeviceStore["🏪 DeviceStore<br/>(Zustand)"]
+        end
+        
+        subgraph "Event Handlers"
+            ControlHandlers["🎮 Control<br/>Handlers"]
+        end
+    end
+    
+    subgraph "🔧 Service Layer"
+        subgraph "API Services"
+            DeviceAPI["🌐 Device API"]
+            HealthAPI["💚 Health API"]
+            HTTPClient["📡 HTTP Client"]
+        end
+        
+        subgraph "WebSocket Client"
+            WSManager["🔄 WS Manager<br/>Auto-Reconnect"]
+        end
+        
+        subgraph "Type Definitions"
+            DeviceTypes["📘 Device<br/>Types"]
+            APITypes["📘 API<br/>Types"]
+        end
+    end
+    
+    %% Connections
+    MotorCard --> useDevice
+    ValveCard --> useDevice  
+    ServoCard --> useDevice
+    TempCard --> useDevice
+    
+    useDevice --> DeviceStore
+    useDevices --> DeviceStore
+    useWebSocket --> WSManager
+    
+    DeviceStore --> DeviceAPI
+    DeviceStore --> WSManager
+    ControlHandlers --> DeviceAPI
+    
+    DeviceAPI --> HTTPClient
+    WSManager --> DeviceTypes
 ```
 
 ## 🚀 Quick Start
