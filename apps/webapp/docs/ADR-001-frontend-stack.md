@@ -1,67 +1,92 @@
-# ADR-001: Stack Frontend - React + TypeScript + Tailwind + Zustand + Vite
+# ADR-001: Frontend Stack - React + TypeScript + Tailwind + Zustand + Vite + Recharts
 
-## Estado
-**Aceptado** - Fecha: [Fecha actual]
 
-## Contexto
-Necesitamos un stack frontend moderno que permita desarrollo rápido, código mantenible y buena experiencia de usuario.
+## Context
+We need a modern frontend stack that enables rapid development, maintainable code, and good user experience. Additionally, the IoT dashboard requires data visualization capabilities for device metrics and historical data.
 
-## Decisión
-**Stack seleccionado:**
+## Decision
+**Selected stack:**
 - **Framework**: React + TypeScript
 - **Styling**: Tailwind CSS  
-- **Estado**: Zustand
-- **Build**: Vite
+- **State Management**: Zustand
+- **Build Tool**: Vite
+- **Charts/Visualization**: Recharts
 
-## Alternativas Evaluadas
+## Evaluated Alternatives
 
-| Categoría | Seleccionado | Alternativas Consideradas | Razón de Selección |
+| Category | Selected | Alternatives Considered | Selection Reason |
 |-----------|--------------|---------------------------|-------------------|
-| **Framework** | React + TS | Vue 3, Angular | Ecosistema maduro, TypeScript nativo, gran adopción |
-| **Styling** | Tailwind | Styled Components, CSS Modules | Desarrollo rápido, sistema consistente, menor CSS |
-| **Estado** | Zustand | Redux Toolkit, Context API | API simple, bundle pequeño, sin boilerplate |
-| **Build** | Vite | CRA, Next.js | HMR instantáneo, builds rápidos, config mínima |
+| **Framework** | React + TS | Vue 3, Angular | Mature ecosystem, native TypeScript, high adoption |
+| **Styling** | Tailwind | Styled Components, CSS Modules | Rapid development, consistent system, less CSS |
+| **State Management** | Zustand | Redux Toolkit, Context API | Simple API, small bundle, no boilerplate |
+| **Build Tool** | Vite | CRA, Next.js | Instant HMR, fast builds, minimal config |
+| **Charts** | Recharts | Chart.js, D3.js, Victory | React-native, declarative, TypeScript support |
 
-## Justificación
+## Justification
 
 ### React + TypeScript
-- **Ecosistema robusto** con amplio soporte comunitario
-- **TypeScript** mejora mantenibilidad y detecta errores temprano
-- **Flexibilidad** arquitectural para diferentes patrones
+- **Robust ecosystem** with extensive community support
+- **TypeScript** improves maintainability and catches errors early
+- **Architectural flexibility** for different patterns
 
 ### Tailwind CSS
-- **Velocidad de desarrollo** con clases utilitarias
-- **Consistencia visual** automática
-- **Bundle optimizado** con purging de CSS no usado
+- **Development speed** with utility classes
+- **Automatic visual consistency**
+- **Optimized bundle** with CSS purging of unused styles
 
 ### Zustand
-- **Simplicidad** extrema (~800 bytes)
-- **TypeScript-first** con excelente inferencia
-- **Sin boilerplate** comparado con Redux
+- **Extreme simplicity** (~800 bytes)
+- **TypeScript-first** with excellent type inference
+- **No boilerplate** compared to Redux
 
 ### Vite
-- **Desarrollo rápido** con HMR casi instantáneo
-- **Builds optimizados** para producción
-- **Configuración mínima** out-of-the-box
+- **Fast development** with near-instant HMR
+- **Optimized builds** for production
+- **Minimal configuration** out-of-the-box
 
-## Consecuencias
+### Recharts
+- **React-native** components with declarative API
+- **TypeScript support** with proper type definitions  
+- **Responsive design** built-in for different screen sizes
+- **Customizable** styling that integrates well with Tailwind
+- **Lightweight** compared to D3.js for simple to medium complexity charts
+- **Perfect fit** for IoT dashboard metrics (line charts, bar charts, gauges)
 
-### ✅ Positivas
-- Mayor productividad de desarrollo
-- Código más mantenible y tipado
-- Experiencia de desarrollo ágil
-- Stack escalable y flexible
+## Consequences
 
-### ⚠️ Consideraciones
-- Curva de aprendizaje inicial para Tailwind
-- Mayor número de dependencias
-- Setup inicial más elaborado
+### ✅ Positive
+- Higher development productivity
+- More maintainable and typed code
+- Agile development experience
+- Scalable and flexible stack
+- **Easy data visualization** for device metrics and trends
+- **Consistent chart styling** with Tailwind integration
 
-## Implementación
-1. Configurar linting (ESLint + Prettier)
-2. Estructura de carpetas escalable
-3. Convenciones de naming claras
-4. Path aliases para imports limpios
+### ⚠️ Considerations
+- Initial learning curve for Tailwind
+- Higher number of dependencies
+- More elaborate initial setup
+- **Additional bundle size** from Recharts library
+
+### 🔧 Mitigations
+- Recharts tree-shaking reduces bundle impact
+- Documentation and examples for chart components
+- Reusable chart component library
+
+## Implementation
+1. Configure linting (ESLint + Prettier)
+2. Scalable folder structure
+3. Clear naming conventions
+4. Path aliases for clean imports
+5. **Chart component library** with common IoT visualizations
+6. **Responsive chart configurations** for mobile and desktop
+
+## Chart Requirements Coverage
+- **Real-time metrics**: Line charts for temperature, speed, pressure
+- **Historical data**: Time series visualizations
+- **Status indicators**: Gauges and progress bars
+- **Comparative data**: Bar charts for device performance
+- **Custom styling**: Integration with Tailwind design system
 
 ---
-*Este ADR documenta la decisión técnica para referencia futura y onboarding de nuevos desarrolladores.*
+*This ADR documents the technical decision for future reference and onboarding of new developers.*
