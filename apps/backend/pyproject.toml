@@ -1,22 +1,20 @@
-[project]
+[tool.poetry]
 name = "valiot-technical-test"
 version = "0.1.0"
 description = "Valiot.io Technical Test"
-authors = [
-    {name = "Ernesto Jiménez Villaseñor",email = "ernjivi@gmail.com"}
-]
-license = {text = "MIT"}
+authors = ["Ernesto Jiménez Villaseñor <ernjivi@gmail.com>"]
+license = "MIT"
 readme = "README.md"
-requires-python = ">=3.13"
-dependencies = [
-    "httpx (>=0.28.1,<0.29.0)",
-    "dependency-injector[yaml] (>=4.48.1,<5.0.0)",
-    "pyyaml (>=6.0.2,<7.0.0)",
-    "fastapi (>=0.116.1,<0.117.0)",
-    "uvicorn (>=0.35.0,<0.36.0)",
-    "pydantic (>=2.11.7,<3.0.0)"
-]
+packages = [{include = "*", from = "src"}]
 
+[tool.poetry.dependencies]
+python = ">=3.13"
+httpx = ">=0.28.1,<0.29.0"
+dependency-injector = {extras = ["yaml"], version = ">=4.48.1,<5.0.0"}
+pyyaml = ">=6.0.2,<7.0.0"
+fastapi = ">=0.116.1,<0.117.0"
+uvicorn = {extras = ["standard"], version = "^0.35.0"}
+pydantic = ">=2.11.7,<3.0.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -61,4 +59,3 @@ precision = 2
 
 [tool.coverage.html]
 directory = "htmlcov"
-
