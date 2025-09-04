@@ -6,6 +6,7 @@ and device control routers.
 """
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from src.application.machine_service import MachineControlService
 from src.infrastructure.api.dependencies import MachineServiceDep
@@ -26,15 +27,36 @@ def create_app() -> FastAPI:
         redoc_url="/redoc"
     )
     
+    # Add CORS middleware for frontend integration
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[
+            "http://localhost:5173",  # Vite default
+            "http://localhost:5174",  # Alternate Vite port
+            "http://localhost:3000",  # Common React port
+            "http://127.0.0.1:5173",
+            "http://127.0.0.1:5174",
+            "http://127.0.0.1:3000",
+        ],
+        allow_credentials=True,
+        allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+        allow_headers=["*"],
+    )
+    
     # Include API routers
     app.include_router(devices.router, prefix="/api/v1")
     
     # Include WebSocket router
     try:
-        from src.infrastructure.api.websockets import endpoints as ws_endpoints
-        app.include_router(ws_endpoints.router)
-    except ImportError:
+        from src.infrastructure.api.websockets.endpoints import router as websocket_router
+        app.include_router(websocket_router)
+        print("✅ WebSocket router included successfully")
+    except ImportError as e:
+        print(f"❌ Failed to import WebSocket router: {e}")
         # WebSockets not available, skip
+        pass
+    except Exception as e:
+        print(f"❌ Error including WebSocket router: {e}")
         pass
     
     @app.get("/")

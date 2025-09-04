@@ -50,7 +50,7 @@ class DeviceUpdateRequest(BaseModel):
     def __init__(self, **data):
         """Custom initialization to ensure at least one field."""
         super().__init__(**data)
-        if not any([self.speed, self.angle, self.state]):
+        if all(v is None for v in [self.speed, self.angle, self.state]):
             raise ValueError('At least one field must be provided')
 
 

@@ -71,8 +71,14 @@ async def update_device(
         if device.device_type == "valve":
             # Valve returns boolean directly
             previous_state = {"value": current_data}
+        elif device.device_type == "motor":
+            # Motor returns number directly
+            previous_state = {"speed": current_data} if isinstance(current_data, (int, float)) else current_data.copy()
+        elif device.device_type == "servo":
+            # Servo returns number directly
+            previous_state = {"angle": current_data} if isinstance(current_data, (int, float)) else current_data.copy()
         else:
-            # Motor, servo, temperature return dict
+            # Generic handling for other device types
             previous_state = current_data.copy() if isinstance(current_data, dict) else {"value": current_data}
         
         # Build update payload based on device type and request
@@ -139,8 +145,18 @@ async def update_device(
             new_state = {"value": updated_data}
             previous_value = previous_state["value"]
             current_value = updated_data
+        elif device.device_type == "motor":
+            # Motor returns number directly, but we need to structure it correctly
+            new_state = {"speed": updated_data} if isinstance(updated_data, (int, float)) else updated_data.copy()
+            previous_value = previous_state.get("speed", previous_state.get("value", 0))
+            current_value = new_state.get("speed", new_state.get("value", 0))
+        elif device.device_type == "servo":
+            # Servo returns number directly, but we need to structure it correctly
+            new_state = {"angle": updated_data} if isinstance(updated_data, (int, float)) else updated_data.copy()
+            previous_value = previous_state.get("angle", previous_state.get("value", 0))
+            current_value = new_state.get("angle", new_state.get("value", 0))
         else:
-            # Motor, servo, temperature return dict
+            # Generic handling for other device types
             new_state = updated_data.copy() if isinstance(updated_data, dict) else {"value": updated_data}
             previous_value = previous_state.get(field_name, 0)
             current_value = new_state.get(field_name, 0)
