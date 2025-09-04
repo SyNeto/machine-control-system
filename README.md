@@ -2,20 +2,29 @@
 
 [![Python](https://img.shields.io/badge/Python-3.13+-blue.svg)](https://python.org)
 [![Poetry](https://img.shields.io/badge/Poetry-Dependency%20Management-blue.svg)](https://python-poetry.org/)
-[![Code Style](https://img.shields.io/badge/Code%20Style-Google-blue.svg)](https://google.github.io/styleguide/pyguide.html)
+[![React](https://img.shields.io/badge/React-18+-61DAFB.svg)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5+-3178C6.svg)](https://www.typescriptlang.org/)
 [![Architecture](https://img.shields.io/badge/Architecture-Hexagonal-green.svg)](https://alistair.cockburn.us/hexagonal-architecture/)
 
-A modern device control system built with simplified hexagonal architecture, providing real-time monitoring and control of industrial devices through REST API and WebSocket interfaces.
+A modern full-stack device control system with real-time monitoring and control of industrial devices. Built with Python FastAPI backend and React TypeScript frontend, featuring WebSocket communication and responsive design.
 
 ## 🚀 Project Overview
 
-The Machine Control Panel is a backend system designed to coordinate multiple control devices in an industrial environment. It provides:
+The Machine Control Panel is a full-stack industrial IoT system with real-time device monitoring and control capabilities. It features a Python FastAPI backend with hexagonal architecture and a modern React TypeScript frontend.
 
+**Backend Features:**
 - **Real-time monitoring** of temperature, motor speed, valve states, and servo positions
-- **Device control** through standardized interfaces
+- **Device control** through standardized REST API interfaces  
+- **WebSocket streaming** for real-time data updates
 - **External API integration** with OpenMeteo for environmental data
 - **Scalable architecture** using dependency injection and hexagonal design
-- **Comprehensive testing** with async/await patterns and HTTP mocking
+
+**Frontend Features:**
+- **Responsive dashboard** built with React 18 and TypeScript 5
+- **Real-time UI updates** via WebSocket connections
+- **Device-specific controls** with validation and error handling
+- **Modern design system** using Tailwind CSS
+- **State management** with Zustand for predictable updates
 
 ### Key Features
 
@@ -78,19 +87,26 @@ This project implements a **Simplified Hexagonal Architecture** with clear separ
 - **Application**: Service coordination and business workflows  
 - **Infrastructure**: External integrations, web APIs, and device adapters
 
-## 🛠️ Quick Start
+## 🛠️ Getting Started
 
 ### Prerequisites
 
-- **Python 3.13+** 
-- **Poetry** for dependency management
+- **Python 3.13+** with Poetry for dependency management
+- **Node.js 18+** with npm for frontend dependencies
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd valiot_technical_test
+   cd machine-control-system
+   ```
+
+### Running the Backend
+
+1. **Navigate to backend directory**
+   ```bash
+   cd apps/backend
    ```
 
 2. **Install dependencies**
@@ -103,68 +119,111 @@ This project implements a **Simplified Hexagonal Architecture** with clear separ
    poetry shell
    ```
 
-4. **Run tests**
+4. **Start the backend server**
    ```bash
-   poetry run pytest
+   uvicorn src.infrastructure.api.main:app --host 0.0.0.0 --port 8000 --reload
    ```
 
-5. **Check code coverage**
+   The backend API will be available at:
+   - **API Documentation**: http://localhost:8000/docs
+   - **REST Endpoints**: http://localhost:8000/api/v1/
+   - **WebSocket**: ws://localhost:8000/ws/devices
+
+### Running the Frontend
+
+1. **Navigate to frontend directory**
    ```bash
-   poetry run pytest --cov=src --cov-report=term-missing
+   cd apps/webapp
    ```
 
-### Development Commands
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+   The frontend will be available at:
+   - **Dashboard**: http://localhost:5173
+
+### Full Stack Development
+
+For full development, run both applications simultaneously:
 
 ```bash
-# Run all tests
-poetry run pytest
+# Terminal 1 - Backend
+cd apps/backend && poetry run uvicorn src.infrastructure.api.main:app --reload
 
-# Run tests with coverage
-poetry run pytest --cov=src --cov-report=html
+# Terminal 2 - Frontend  
+cd apps/webapp && npm run dev
+```
 
-# Run specific test file
-poetry run pytest tests/domain/test_io_device.py
+### Testing
 
-# Install new dependency
-poetry add <package-name>
+**Backend Tests:**
+```bash
+cd apps/backend
+poetry run pytest                                    # Run all tests
+poetry run pytest --cov=src --cov-report=html      # With coverage
+```
 
-# Install development dependency
-poetry add --group dev <package-name>
+**Frontend Tests:**
+```bash
+cd apps/webapp
+npm run test                                        # Run tests
+npm run build                                       # Build for production
 ```
 
 ## 📁 Project Structure
 
 ```
-valiot_technical_test/
+machine-control-system/
 ├── README.md                          # Project documentation
-├── pyproject.toml                     # Poetry configuration
-├── config/
-│   └── devices.yaml                   # Device configuration
-├── docs/                              # Architecture Decision Records
-│   ├── ADR-001-architecture.md        # Simplified hexagonal architecture
-│   ├── ADR-002-documentation.md       # Google-style docstrings
-│   ├── ADR-003-dependency-injection.md # DI container patterns
-│   └── ADR-004-web-api-layer.md       # FastAPI integration
-├── src/
-│   ├── domain/                        # Core business logic
-│   │   └── ports/
-│   │       └── io_device.py           # Device abstraction interface
-│   ├── application/                   # Business workflows
-│   │   └── machine_service.py         # Device coordination service
-│   ├── infrastructure/                # External integrations
-│   │   ├── adapters/                  # Device implementations
-│   │   │   ├── temperature_adapter.py # OpenMeteo API integration
-│   │   │   ├── motor_adapter.py       # Motor control simulation
-│   │   │   ├── valve_adapter.py       # Valve state management
-│   │   │   └── servo_adapter.py       # Servo position control
-│   │   ├── di/                        # Dependency injection
-│   │   │   ├── containers.py          # DI container setup
-│   │   │   └── factory.py             # Container factory
-│   │   └── web/                       # [Coming Soon] FastAPI layer
-└── tests/                             # Comprehensive test suite
-    ├── domain/                        # Domain layer tests
-    ├── application/                   # Application layer tests
-    └── infrastructure/                # Infrastructure layer tests
+├── CLAUDE.md                         # AI assistant configuration
+└── apps/
+    ├── backend/                       # Python FastAPI Backend
+    │   ├── pyproject.toml            # Poetry configuration
+    │   ├── config/
+    │   │   └── devices.yaml          # Device configuration  
+    │   ├── docs/                     # Architecture Decision Records
+    │   ├── src/
+    │   │   ├── domain/               # Core business logic
+    │   │   │   └── ports/
+    │   │   │       └── io_device.py  # Device abstraction
+    │   │   ├── application/          # Business workflows
+    │   │   │   └── machine_service.py # Device coordination
+    │   │   └── infrastructure/       # External integrations
+    │   │       ├── adapters/         # Device implementations
+    │   │       ├── di/              # Dependency injection
+    │   │       └── api/             # FastAPI web layer
+    │   │           ├── main.py      # Application entry point
+    │   │           ├── routers/     # REST API endpoints
+    │   │           ├── models/      # Request/Response models
+    │   │           ├── dependencies.py # DI integration
+    │   │           └── websockets/  # WebSocket endpoints
+    │   └── tests/                   # Backend test suite
+    └── webapp/                      # React TypeScript Frontend
+        ├── package.json            # npm configuration
+        ├── vite.config.ts         # Vite build configuration
+        ├── tailwind.config.js     # Tailwind CSS configuration
+        ├── docs/                  # Frontend ADRs
+        │   ├── ADR-001-frontend-stack.md
+        │   └── ADR-002-component-architecture.md
+        └── src/
+            ├── components/        # React components
+            │   ├── ui/           # Reusable UI components
+            │   ├── layout/       # Layout components  
+            │   └── devices/      # Device-specific components
+            ├── hooks/            # Custom React hooks
+            ├── services/         # API integration layer
+            │   └── api/          # REST and WebSocket clients
+            ├── store/            # Zustand state management
+            ├── types/            # TypeScript definitions
+            ├── config/           # Configuration constants
+            └── utils/            # Utility functions
 ```
 
 ## 🔧 Supported Devices
@@ -193,70 +252,70 @@ valiot_technical_test/
 - **Feedback**: Current position and movement status
 - **Calibration**: Self-calibration and limit detection
 
-## 🧪 Development Workflow
+## 🛠️ Technology Stack
 
-### Testing Strategy
+### Backend Stack
+- **🐍 Python 3.13+** - Core runtime and language
+- **⚡ FastAPI** - Modern web framework with automatic API documentation
+- **🔌 WebSockets** - Real-time bidirectional communication  
+- **📦 Poetry** - Dependency management and packaging
+- **🧪 Pytest** - Testing framework with async support
+- **🎯 Dependency Injection** - Clean architecture with container pattern
+- **📊 OpenMeteo API** - Real environmental temperature data
 
-- **Unit Tests**: Comprehensive coverage for all layers
-- **Integration Tests**: Device adapter validation with HTTP mocking
-- **Async Testing**: Full async/await pattern testing
-- **Mock Strategies**: Proper isolation of external dependencies
+### Frontend Stack
+- **⚛️ React 18** - Modern component-based UI framework
+- **📘 TypeScript 5** - Type-safe JavaScript development
+- **🎨 Tailwind CSS** - Utility-first CSS framework
+- **🏪 Zustand** - Lightweight state management
+- **⚡ Vite** - Fast build tool and development server
+- **🔗 WebSocket Client** - Real-time data streaming
+- **📱 Responsive Design** - Mobile-first responsive layouts
 
-### Code Coverage
+### Architecture Patterns
+- **🏗️ Hexagonal Architecture** - Clean separation of concerns
+- **🔌 Ports & Adapters** - Technology-agnostic business logic
+- **🚀 Service Layer** - Business workflow coordination
+- **📡 WebSocket Integration** - Real-time UI updates
+- **🎯 Component Composition** - Reusable UI building blocks
 
-Coverage analysis excludes infrastructure configuration (DI containers) to focus on business logic:
+## 📋 Key Features
 
-```bash
-# Generate coverage report
-poetry run pytest --cov=src --cov-report=html
+### ✅ Implemented Features
 
-# View detailed coverage
-open htmlcov/index.html
-```
+**Backend Capabilities:**
+- ✅ **Device Abstraction** - Generic IoDevice interface for all device types
+- ✅ **REST API** - FastAPI endpoints for device control and monitoring
+- ✅ **WebSocket Streaming** - Real-time device state updates
+- ✅ **CORS Support** - Frontend integration with proper cross-origin handling
+- ✅ **Device Types** - Motor (0-255 PWM), Servo (0-180°), Valve (open/closed), Temperature sensor
+- ✅ **External APIs** - OpenMeteo integration for real environmental data
+- ✅ **Error Handling** - Comprehensive validation and error responses
 
-### Architecture Decision Records
+**Frontend Capabilities:**
+- ✅ **Responsive Dashboard** - Mobile-first design with device status overview
+- ✅ **Real-time Controls** - Sliders, toggles, and displays with live updates
+- ✅ **WebSocket Integration** - Auto-reconnecting real-time data streaming
+- ✅ **Device-Specific UI** - Tailored controls for each device type
+- ✅ **State Management** - Zustand store with optimistic updates
+- ✅ **Type Safety** - Full TypeScript coverage for API and UI
+- ✅ **PWM-RPM Mapping** - Motor speed display conversion (0-255 → 0-40000 RPM)
 
-All major architectural decisions are documented in the `docs/` directory:
-
-- **ADR-001**: Simplified hexagonal architecture rationale
-- **ADR-002**: Documentation standards (Google-style docstrings)  
-- **ADR-003**: Dependency injection patterns and container design
-- **ADR-004**: Web API layer design with FastAPI
-
-## 🚧 Roadmap
-
-### Phase 1: Core Backend ✅
-- [x] Domain layer with device abstractions
-- [x] Infrastructure adapters for all device types
-- [x] Application service coordination
-- [x] Dependency injection container
-- [x] Comprehensive testing suite
-
-### Phase 2: Web API Layer 🚧
-- [ ] FastAPI integration with REST endpoints
-- [ ] WebSocket real-time data streaming
-- [ ] Background polling with device-specific intervals
-- [ ] API documentation and validation
-
-### Phase 3: Frontend Integration 📋
-- [ ] React frontend integration
-- [ ] Real-time dashboard with WebSocket connections
-- [ ] Device control interface
-- [ ] System monitoring and alerts
-
-### Phase 4: Production Features 📋
-- [ ] Authentication and authorization
-- [ ] Data persistence and logging
-- [ ] System health monitoring
-- [ ] Deployment configuration
+### 🚀 Future Enhancements
+- **Authentication & Authorization** - User management and access control
+- **Data Persistence** - Historical data logging and analytics
+- **Alert System** - Configurable thresholds and notifications
+- **Device Discovery** - Auto-detection of new devices
+- **Multi-tenant Support** - Organization and user isolation
 
 ## 🤝 Contributing
 
-1. Follow the established architecture patterns
-2. Maintain comprehensive test coverage
+1. Follow the established hexagonal architecture patterns
+2. Maintain comprehensive test coverage for both backend and frontend
 3. Document architectural decisions in ADRs
-4. Use Google-style docstrings
-5. Ensure async/await compatibility
+4. Use Google-style docstrings for Python and TSDoc for TypeScript
+5. Ensure async/await compatibility and proper error handling
+6. Follow Conventional Commits 1.0 for commit messages
 
 ## 📄 License
 
@@ -264,4 +323,4 @@ MIT License - see LICENSE file for details.
 
 ---
 
-**Built with ❤️ using Python, Poetry, and Hexagonal Architecture principles.**
+**Built with ❤️ using Python FastAPI, React TypeScript, and modern full-stack architecture.**
