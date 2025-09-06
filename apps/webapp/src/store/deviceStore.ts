@@ -8,7 +8,8 @@ import {
   SystemStatus, 
   ConnectionState,
   DeviceControlPayload,
-  DeviceUpdateMessage
+  DeviceUpdateMessage,
+  DeviceValue
 } from '@/types/devices';
 import * as deviceApi from '@/services/api/devices';
 import { 
@@ -222,13 +223,18 @@ export const useDeviceStore = create<DeviceStore>()(
         const device = get().devices[deviceId];
         if (device) {
           // Extract the correct value based on device type
-          let newValue = response.new_state;
+          let newValue: DeviceValue;
           if (device.device_type === 'motor' && response.new_state?.speed !== undefined) {
             newValue = response.new_state.speed;
           } else if (device.device_type === 'servo' && response.new_state?.angle !== undefined) {
             newValue = response.new_state.angle;
           } else if (device.device_type === 'valve' && response.new_state?.value !== undefined) {
             newValue = response.new_state.value;
+          } else if (device.device_type === 'temperature' && response.new_state?.temperature !== undefined) {
+            newValue = response.new_state.temperature;
+          } else {
+            // Fallback: use the entire object as-is and cast it
+            newValue = response.new_state as DeviceValue;
           }
 
           get().updateDeviceLocally(deviceId, {
@@ -301,13 +307,18 @@ onDeviceUpdate((updateMessage: DeviceUpdateMessage) => {
   
   if (device && updateMessage.changed) {
     // Extract the correct value based on device type
-    let newValue = updateMessage.new_state;
+    let newValue: DeviceValue;
     if (device.device_type === 'motor' && updateMessage.new_state?.speed !== undefined) {
       newValue = updateMessage.new_state.speed;
     } else if (device.device_type === 'servo' && updateMessage.new_state?.angle !== undefined) {
       newValue = updateMessage.new_state.angle;
     } else if (device.device_type === 'valve' && updateMessage.new_state?.value !== undefined) {
       newValue = updateMessage.new_state.value;
+    } else if (device.device_type === 'temperature' && updateMessage.new_state?.temperature !== undefined) {
+      newValue = updateMessage.new_state.temperature;
+    } else {
+      // Fallback: use the entire object as-is and cast it
+      newValue = updateMessage.new_state as DeviceValue;
     }
 
     store.updateDeviceLocally(updateMessage.device_id, {
